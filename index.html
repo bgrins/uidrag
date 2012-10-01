@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset=utf-8 />
-<title>JS Bin</title>
+<title>uidrag</title>
 
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
 <style>
@@ -30,47 +30,71 @@ body {
 	</p>
 
 	<h2>Demo</h2>
+
+	<form class="form-inline">
+	  <label class="checkbox">
+	    <input type="checkbox" id="preventstart"> Prevent Start
+	  </label>
+	  <label class="checkbox">
+	    <input type="checkbox"> Contain Within Parent
+	  </label>
+	  <div class="pull-right">
+			uidragstart: <span id="dragstart" class="badge">0</span> |
+			uidrag: <span id="drag" class="badge badge-success">0</span> |
+			uidragend: <span id="dragend" class="badge">0</span>
+	  </div>
+	</form>
+
+	<div>
+
+
+
+	</div>
+
 	<div id='el'><div id='spot'></div></div>
   
   	</div>
-<script src="uidrag.js"></script>
+
+
+	<script src="uidrag.js"></script>
 
 <script>
 
-window.onload = function() {
-    
+var dragLabel = document.getElementById("drag");
+var dragStartLabel = document.getElementById("dragstart");
+var dragEndLabel = document.getElementById("dragend");    
+var preventstart = document.getElementById("preventstart");
 var spot = document.getElementById('spot');
 var el = document.getElementById("el");
 
     
 el.addEventListener("uidrag", function(e) {
-    console.log("DRAG");
+    dragLabel.innerHTML = parseInt(dragLabel.innerHTML) + 1;
+    //console.log(e);
+
+    var x = e.detail.dragX;
+    var y = e.detail.dragY;
+
+	spot.style.top = (y - (spot.offsetHeight / 2)) + "px";
+	spot.style.left = (x - (spot.offsetWidth / 2)) + "px";;
 });
 
 el.addEventListener("uidragstart", function(e) {
-    //e.preventDefault();
+    if (preventstart.checked) {
+    	e.preventDefault();
+    	return;
+    }
+
+   	spot.className = "dragging";
+    dragStartLabel.innerHTML = parseInt(dragStartLabel.innerHTML) + 1;
 });
     
 el.addEventListener("uidragend", function(e) {
-    
+    dragEndLabel.innerHTML = parseInt(dragEndLabel.innerHTML) + 1;
+   	spot.className = "";
 });
 
-tinydrag(el, demoDragMove, demoDragStart, demoDragStop);
-         
-function demoDragMove(x, y) {
-   spot.style.top = (y - (spot.offsetHeight / 2)) + "px";
-   spot.style.left = (x - (spot.offsetWidth / 2)) + "px";;
-} 
-function demoDragStart(x, y) {
-   spot.className = "dragging";
-} 
-function demoDragStop(x, y) {
-   spot.className = "";
-} 
-
-};
-
-
+tinydrag(el);
 
 </script>
 
