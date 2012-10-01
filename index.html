@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>JS Bin</title>
+
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+<style>
+body {
+  background: url(css/grunge.png);
+}
+.container { background: white; padding: 40px 10px; }
+#el { margin: 0 auto; border: solid 10px; width: 200px; height:200px; position:relative; }
+#spot { position:absolute; top:0; left:0; width: 6px; height:6px; border:solid 2px; border-radius: 4px; }
+
+#spot.dragging { border-color: orange; }​
+</style>
+</head>
+<body>
+  
+  <div class="container">
+  	<h1>uidrag</h1>
+  	<p>
+  		<strong>There should be an "uidrag", "uidragstart", and "uidragstop" events!</strong>
+  	</p>
+	<p>The <a href='http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html'>native drag events aren't good</a>.  And every time I want to build a demo with advanced mouse / touch handling I have to reimplement the wheel (or in clude jQuery).
+	</p>
+
+	<p>It should be an event you can bind to like: document.addEventListener("onmousedrag", function() {}, false);
+	</p>
+
+	<h2>Demo</h2>
+	<div id='el'><div id='spot'></div></div>
+  
+  	</div>
+<script src="uidrag.js"></script>
+
+<script>
+
+window.onload = function() {
+    
+var spot = document.getElementById('spot');
+var el = document.getElementById("el");
+
+    
+el.addEventListener("uidrag", function(e) {
+    console.log("DRAG");
+});
+
+el.addEventListener("uidragstart", function(e) {
+    //e.preventDefault();
+});
+    
+el.addEventListener("uidragend", function(e) {
+    
+});
+
+tinydrag(el, demoDragMove, demoDragStart, demoDragStop);
+         
+function demoDragMove(x, y) {
+   spot.style.top = (y - (spot.offsetHeight / 2)) + "px";
+   spot.style.left = (x - (spot.offsetWidth / 2)) + "px";;
+} 
+function demoDragStart(x, y) {
+   spot.className = "dragging";
+} 
+function demoDragStop(x, y) {
+   spot.className = "";
+} 
+
+};
+
+
+
+</script>
+
+</body>
+</html>
